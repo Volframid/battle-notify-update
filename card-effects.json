@@ -1,0 +1,28 @@
+{
+  "enabled": true,
+  "notifyReady": false,
+  "showOnProc": true,
+  "warningTimes": [5, 3],
+  "outOfCombat": {
+    "showRemainingOnExit": true,
+    "notifyReady": true,
+    "milestoneTimes": [120, 90, 60, 30]
+  },
+  "autoDiscover": { "enabled": true, "minId": 30000000, "maxIdExclusive": 30000100 },
+  "effects": [
+    {
+      "key": "card-30000019",
+      "name": "Magic and Physical Amplification",
+      "displayName": "Amplification",
+      "abnormalityIds": [30000019],
+      "cooldownSeconds": 180
+    },
+    {
+      "key": "card-30000023",
+      "name": "Increased Magic and Physical Crit Power",
+      "displayName": "Crit Power",
+      "abnormalityIds": [30000023],
+      "cooldownSeconds": 180
+    }
+  ]
+}

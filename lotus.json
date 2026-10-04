@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "warningTimes": [5, 3],
+  "notifyEnded": true,
+  "effects": [
+    {
+      "key": "moon",
+      "name": "Moon Lotus",
+      "skillIds": [60401323],
+      "buffIds": [97950020],
+      "cooldownBuffIds": [97950021]
+    },
+    {
+      "key": "star",
+      "name": "Star Lotus",
+      "skillIds": [60401324, 61401324],
+      "buffIds": [99950020],
+      "cooldownBuffIds": [99950021]
+    }
+  ]
+}
