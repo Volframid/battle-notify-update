@@ -401,11 +401,13 @@ function BattleNotify(mod) {
             if (!logger.active) { message('Log is OFF. Use battle log first.'); return }
             logger.record('session', 'USER_MARK', { text: args.join(' ') })
             message(logger.active ? 'Log marker added.' : 'Log stopped because writing failed.')
+        } else if (command === 'lotus') {
+            lotusMonitor.command(args[0] || 'status')
         } else if (command === 'status') {
             logger.record('session', 'STATUS_QUERY', { state: snapshot() })
             message('Notifications active | class ' + (mod.game.me.class || 'unknown') +
                 ' | log ' + (logger.active ? 'ON' : 'OFF'))
-        } else message('battle status | battle log [on/off/status] | battle mark description')
+        } else message('battle status | battle log [on/off/status] | battle mark description | battle lotus status/reload')
     })
     if (mod.game.isIngame) start()
     this.destructor = () => {

@@ -28,10 +28,10 @@ The module displays notifications; it does not cast skills or use items. Cards, 
 | `cards` | Show observed card cooldowns |
 | `cards reload` | Reload card settings; counters restart at the next proc |
 | `cards clear` | Clear observed card counters |
-| `lotus` | Show observed Lotus blessing/recharge times |
-| `lotus reload` | Reload Lotus settings and synchronize existing buffs |
+| `battle lotus` | Show observed Lotus blessing/recharge times |
+| `battle lotus reload` | Reload Lotus settings and synchronize existing buffs |
 
-Logging starts OFF. Each recording creates one `logs/battle-*.jsonl` file containing state snapshots, relevant packets, notifications and tracking decisions. Use `battle log` before a test and again when finished. The old `cards log` and `lotus log` commands only redirect you to `battle log`.
+Logging starts OFF. Each recording creates one `logs/battle-*.jsonl` file containing state snapshots, relevant packets, notifications and tracking decisions. Use `battle log` before a test and again when finished. `cards log` and `battle lotus log` direct you to `battle log`. The separate Lotus Cycle mod owns the `lotus` command.
 
 ## Settings
 
