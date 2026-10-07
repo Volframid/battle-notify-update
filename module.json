@@ -1,11 +1,15 @@
 {
-    "disableAutoUpdate": false,
-    "name": "battle-notify",
-    "author": "Caali / wuaw / CEM",
-    "description": "Standalone icon notifications, card cooldowns, brooch and Lotus monitoring with unified battle logging",
-  "version": "1.0.1",
-    "options": {
-        "cliName": "BattleNotify",
-        "guiName": "BattleNotify"
-    }
+  "disableAutoUpdate": false,
+  "name": "battle-notify",
+  "author": "Caali / wuaw / CEM",
+  "description": "Standalone icon notifications, card cooldowns, brooch and Lotus monitoring with unified battle logging",
+  "version": "1.0.2",
+  "options": {
+    "cliName": "BattleNotify",
+    "guiName": "BattleNotify"
+  },
+  "servers": [
+    "https://raw.githubusercontent.com/Volframid/battle-notify-update/main/"
+  ],
+  "supportUrl": "https://github.com/Volframid/battle-notify-update/issues"
 }
