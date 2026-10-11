@@ -1,6 +1,6 @@
 # Battle Notify
 
-Standalone TERA Toolbox notifications for all 13 classes. Based on Battle Notify by Caali / wuaw; extended by CEM.
+Buff, cooldown and combat notifications for TERA Toolbox. Based on Battle Notify by Caali / wuaw; extended by CEM.
 
 ## Installation
 
@@ -24,7 +24,7 @@ For maintainers: every push to `main` runs the GitHub workflow to regenerate and
 - **Lotus:** Moon/Star blessing warnings at 5, 3 and Ended, with protection against false expiry alerts during map changes.
 - **One diagnostic log:** all notification components record through `battle log`.
 
-The module displays notifications; it does not cast skills or use items. Cards, brooch and Lotus monitoring work on every class.
+The module displays notifications; it does not cast skills or use items.
 
 ## Commands
 
@@ -48,7 +48,7 @@ Logging starts OFF. Each recording creates one `logs/battle-*.jsonl` file contai
 | File | Purpose |
 |---|---|
 | `config/common.js` | Shared notification rules |
-| `config/<class>.js` | Rules for the corresponding class |
+| `config/<class>.js` | Skill and buff rules for all 13 classes |
 | `config/common_styling.js` | Default channels and colors |
 | `card-effects.json` | Card discovery, labels and cooldown warnings |
 | `lotus.json` | Lotus IDs and expiry warnings |
