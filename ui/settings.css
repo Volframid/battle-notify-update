@@ -1,0 +1,15 @@
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#14171f;color:#eff0f6;font:14px Segoe UI,sans-serif}header small{font-weight:700;letter-spacing:2px;color:#b899ff}h1{font-size:26px;margin:8px 0}h2{font-size:15px;margin:0 0 14px}p{color:#aeb5c8;line-height:1.5;margin:6px 0 14px}.hint{font-size:12px;margin-top:12px}section{padding:16px;border:1px solid #353c4f;border-radius:12px;margin-top:14px}.mode{display:flex;align-items:center;justify-content:space-between}#status{font-size:12px;color:#b899ff}.actions{display:flex;gap:8px;flex-wrap:wrap}button{background:#202532;border:1px solid #424a60;border-radius:7px;color:#eff0f6;padding:8px 12px;cursor:pointer;font:inherit}button:hover{border-color:#b899ff}.primary{background:#3a2c59;border-color:#9772e2}input{accent-color:#b899ff}input[type=number]{width:90px;background:#14171f;border:1px solid #424a60;color:#fff;border-radius:6px;padding:6px 8px;font:inherit}input:focus-visible,button:focus-visible{outline:2px solid #b899ff;outline-offset:2px}.coordinates{display:flex;gap:24px;margin-top:12px}.coordinates label{display:flex;flex-direction:column;gap:6px;color:#aeb5c8}.coordinates input{width:130px}.control{display:grid;grid-template-columns:160px minmax(80px,1fr) 90px;gap:14px;align-items:center;margin:9px 0}.control input[type=range]{width:100%;cursor:pointer}footer{display:flex;gap:12px;align-items:center;margin-top:18px}#notice{font-size:12px;color:#aeb5c8;flex:1}label{cursor:pointer}
+/* Explicit controls also support the Chromium version bundled with Toolbox. */
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#4b425e;border-radius:6px}
+input[type=range]{-webkit-appearance:none;height:4px;border:0;border-radius:4px;background:#41485b;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#b899ff;border:1px solid #d3bdff}
+input[type=range]:hover::-webkit-slider-thumb{background:#cab0ff}
+input[type=checkbox]{-webkit-appearance:none;width:16px;height:16px;vertical-align:middle;border:1px solid #7e6f9d;border-radius:4px;background:#202532;cursor:pointer}
+input[type=checkbox]:checked{background:#b899ff;position:relative}input[type=checkbox]:checked:after{content:'✓';position:absolute;left:2px;top:-3px;color:#14171f;font-weight:bold}
+body{padding:0;height:100vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid #353c4f}
+.titlebar{flex:0 0 36px;height:36px;display:flex;align-items:center;justify-content:space-between;padding-left:18px;background:#14171f;border-bottom:1px solid #353c4f;-webkit-app-region:drag;user-select:none;font-size:10px;letter-spacing:1px}
+.titlebar small{font-size:9px;color:#aeb5c8;font-weight:400;letter-spacing:1px;margin-left:12px}
+.titlebar nav{height:100%;display:flex;-webkit-app-region:no-drag}
+.titlebar button{border:0;border-radius:0;background:transparent;width:42px;padding:0;font-size:20px;line-height:1;color:#eff0f6}
+.titlebar button:hover{background:#302740}.titlebar #window-close:hover{background:#82384c}
+.content{min-height:0;overflow:auto;flex:1;padding:24px}

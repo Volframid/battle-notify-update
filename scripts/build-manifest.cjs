@@ -25,5 +25,23 @@ for (const file of ['.gitignore', 'README.md', 'card-effects.json', 'config.json
 for (const directory of ['config', 'lib']) {
   if (fs.existsSync(path.join(root, directory))) walk(directory);
 }
+// Explicit UI assets: never include user data, diagnostics or working journals.
+for (const file of ['preload.js', 'overlay.html', 'overlay.css', 'overlay-renderer.js',
+  'settings.html', 'settings.css', 'settings-renderer.js', 'icons.json', 'ICONS.md', 'ICON-LICENSE.txt']) {
+  add('ui/' + file);
+}
+// The updater fetches these prebuilt components with the rest of the mod.
+// Select only the current hashed binaries: never ship build tools or old DLLs.
+const renderer = JSON.parse(fs.readFileSync(path.join(root, 'native/renderer.json'), 'utf8'));
+if (renderer.protocol !== 1 || !/^[0-9a-f]{16}$/.test(renderer.buildId)) throw Error('Invalid renderer metadata');
+for (const arch of ['x64', 'ia32']) {
+  const item = renderer.architectures[arch];
+  if (!item || !new RegExp('^native/bin/battle-render-[0-9a-f]{12}-' + arch + '\\.dll$').test(item.file)) throw Error('Invalid renderer path');
+  add(item.file);
+  if (files[item.file] !== item.sha256.toUpperCase()) throw Error('Renderer checksum mismatch: ' + arch);
+}
+add('native/renderer.json');
+add('native/README.md');
+for (const name of ['MinHook.txt', 'LLVM.txt', 'MinGW-runtime.txt', 'MinGW.txt', 'Winpthreads.txt']) add('native/licenses/' + name);
 fs.writeFileSync(path.join(root, 'manifest.json'), JSON.stringify({ files }, null, 2) + '\n');
 console.log('Update manifest generated for ' + Object.keys(files).length + ' files.');

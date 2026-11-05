@@ -1,0 +1,14 @@
+{
+  "protocol": 1,
+  "buildId": "f2c88f87f932d714",
+  "architectures": {
+    "x64": {
+      "file": "native/bin/battle-render-03c5b65a31d0-x64.dll",
+      "sha256": "03c5b65a31d03fbc6c3d2f25b5f8bebdb9c4ae112964b50d2f1dabfd7d0fe02a"
+    },
+    "ia32": {
+      "file": "native/bin/battle-render-5a190a9f3d2f-ia32.dll",
+      "sha256": "5a190a9f3d2f501f74ca93958edb8cfc8f501a2183b17c919c5f8a89bdb20496"
+    }
+  }
+}

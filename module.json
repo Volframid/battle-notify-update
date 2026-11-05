@@ -2,8 +2,8 @@
   "disableAutoUpdate": false,
   "name": "battle-notify",
   "author": "Caali / wuaw / CEM",
-  "description": "Icon notifications, card cooldowns, brooch and Lotus monitoring with unified battle logging",
-  "version": "1.0.2",
+  "description": "Movable icon notifications, card cooldowns, brooch and Lotus monitoring with unified battle logging",
+  "version": "1.1.0",
   "options": {
     "cliName": "BattleNotify",
     "guiName": "BattleNotify"

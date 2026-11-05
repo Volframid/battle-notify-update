@@ -4,3 +4,6 @@
 *.bak
 Thumbs.db
 Desktop.ini
+
+/data/
+/LOCAL_UPDATES.md

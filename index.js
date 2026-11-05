@@ -6,6 +6,7 @@ const CooldownManager = require('./lib/cooldown')
 const EntityManager = require('./lib/entity')
 const PartyManager = require('./lib/party')
 const Notify = require('./lib/notify')
+const Overlay = require('./lib/overlay')
 const CardEffects = require('./lib/card-effects')
 const BroochCountdown = require('./lib/brooch-countdown')
 const LotusMonitor = require('./lib/lotus-monitor')
@@ -46,7 +47,8 @@ function BattleNotify(mod) {
     const cooldown = new CooldownManager(mod, logger)
     const entities = new EntityManager(mod)
     const party = new PartyManager(mod)
-    const notify = new Notify(mod, logger)
+    const overlay = new Overlay(mod)
+    const notify = new Notify(mod, logger, overlay)
     const cardEffects = new CardEffects(mod, notify, { logger })
     const broochCountdown = new BroochCountdown(mod, notify, { logger })
     const lotusMonitor = new LotusMonitor(mod, notify, { logger })
@@ -62,6 +64,7 @@ function BattleNotify(mod) {
     function stopInterval() {
         if (interval !== null) mod.clearInterval(interval)
         interval = null
+        overlay.clear()
     }
     function start() {
         stopInterval()
@@ -390,7 +393,11 @@ function BattleNotify(mod) {
     mod.command.add('battle', (command = 'status', ...args) => {
         command = command.toLowerCase()
         const message = text => mod.command.message('[Battle Notify] ' + text)
-        if (command === 'log') {
+        if (command === 'ui') {
+            overlay.open()
+        } else if (command === 'overlay') {
+            overlay.command((args[0] || 'settings').toLowerCase())
+        } else if (command === 'log') {
             const mode = (args[0] || 'toggle').toLowerCase()
             if (!['toggle', 'on', 'off', 'status'].includes(mode)) { message('battle log [on/off/status]'); return }
             if (mode === 'off' || mode === 'toggle' && logger.active) logger.stop()
@@ -406,12 +413,13 @@ function BattleNotify(mod) {
         } else if (command === 'status') {
             logger.record('session', 'STATUS_QUERY', { state: snapshot() })
             message('Notifications active | class ' + (mod.game.me.class || 'unknown') +
-                ' | log ' + (logger.active ? 'ON' : 'OFF'))
-        } else message('battle status | battle log [on/off/status] | battle mark description | battle lotus status/reload')
+                ' | log ' + (logger.active ? 'ON' : 'OFF') + ' | overlay ' + (overlay.status().enabled ? 'ON' : 'OFF'))
+        } else message('battle ui | battle overlay move/lock/on/off/test | battle status | battle log [on/off/status] | battle mark description | battle lotus status/reload')
     })
     if (mod.game.isIngame) start()
     this.destructor = () => {
         stopInterval()
+        overlay.destructor()
         lotusMonitor.destructor()
         broochCountdown.destructor()
         cardEffects.destructor()

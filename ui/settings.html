@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline';">
+<title>Battle Notify settings</title><link rel="stylesheet" href="settings.css"></head><body>
+<header class="titlebar"><span>BATTLE NOTIFY <small>NOTIFICATION SETTINGS</small></span><nav><button id="window-minimize" aria-label="Minimize">−</button><button id="window-close" aria-label="Close">×</button></nav></header>
+<div class="content"><header><small>BATTLE NOTIFY</small><h1>Your alerts. Your space.</h1><p>Move notifications anywhere. Keep your game controls free.</p></header>
+<section class="mode"><label><input id="enabled" type="checkbox"> Movable notifications</label><span id="status"></span></section>
+<section><h2>Position</h2><div class="actions"><button id="edit" class="primary">Move & preview</button><button id="lock">Lock position</button><button id="test">Test notification</button></div>
+<p class="hint">Drag the preview header, then lock it. In fullscreen, return to the game and use /8 battle overlay move. Locked alerts let clicks pass through.</p>
+<div class="coordinates"><label>Horizontal (X)<input id="x" type="number" step="1" min="-100000" max="100000"></label><label>Vertical (Y)<input id="y" type="number" step="1" min="-100000" max="100000"></label></div></section>
+<section><h2>Appearance & timing</h2><div id="controls"></div><p class="hint">Transparency affects the background only. Text and icons stay clear.</p></section>
+<footer><button id="reset">Reset defaults</button><span id="notice">Changes save automatically.</span><button id="close" class="primary">Done</button></footer>
+</div><script src="settings-renderer.js"></script></body></html>
