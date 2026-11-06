@@ -10,6 +10,7 @@ const Overlay = require('./lib/overlay')
 const CardEffects = require('./lib/card-effects')
 const BroochCountdown = require('./lib/brooch-countdown')
 const LotusMonitor = require('./lib/lotus-monitor')
+const upgradeEvent = require('./lib/event-upgrade')
 
 const isDefined = x => typeof x !== 'undefined'
 const isArray = Array.isArray
@@ -65,6 +66,7 @@ function BattleNotify(mod) {
         if (interval !== null) mod.clearInterval(interval)
         interval = null
         overlay.clear()
+        notify.clearLive()
     }
     function start() {
         stopInterval()
@@ -227,6 +229,35 @@ function BattleNotify(mod) {
         this.abnormal = new AbnormalTargets()
     }
 
+    function BuffCountdown(data) {
+        const getTargets = targets.abnormal[data.target.toLowerCase()]
+        const ids = toArray(data.abnormalities), active = new Map()
+        const threshold = data.countdownStart || 10
+        const prefix = 'buff:' + data.target + ':' + ids.join(',') + ':'
+        this.live = true
+        this.check = function () {
+            const seen = new Set(), now = Date.now()
+            if (mod.game.isIngame && interval !== null && !mod.game.isInLoadingScreen) for (const id of getTargets()) {
+                if (!id || entities.get(id).dead) continue
+                const key = prefix + id.toString(); seen.add(key)
+                // Alternatives represent the same useful debuff. A longer active
+                // variant must suppress an expiring shorter one (e.g. training boss).
+                const info = ids.map(buff => abMan.get(id, buff))
+                    .filter(x => (x.added || x.refreshed) && Number(x.expires) > now)
+                    .sort((a, b) => Number(b.expires) - Number(a.expires))[0]
+                const seconds = info ? Math.ceil((Number(info.expires) - now) / 1000) : 0
+                if (seconds > 0 && seconds <= threshold) {
+                    const text = data.message.replace('{icon}', info.icon).replace('{duration}', seconds + 's')
+                    if (active.get(key) !== text) notify.live(key, text, Number(info.expires))
+                    active.set(key, text)
+                } else { notify.cancelLive(key); active.delete(key) }
+            }
+            for (const key of active.keys()) if (!seen.has(key)) { notify.cancelLive(key); active.delete(key) }
+        }
+    }
+    // Refresh/end packets cancel or revise a visible buff timer immediately.
+    abMan.onChange = () => { for (const e of events) if (e.live) e.check() }
+
     function AbnormalEvent(data) {
         const type = data.type.toLowerCase()
         const target = data.target.toLowerCase()
@@ -350,7 +381,9 @@ function BattleNotify(mod) {
     }
     function loadEvent(event) {
         let type
-        if (event.abnormalities)
+        if (event.type && event.type.toLowerCase() === 'countdown')
+            type = BuffCountdown
+        else if (event.abnormalities)
             type = AbnormalEvent
         else if (event.type && event.type.toLowerCase() === 'reset')
             type = ResetEvent
@@ -366,7 +399,8 @@ function BattleNotify(mod) {
 
         toArray(data)
             .forEach(event => {
-                const result = tryIt(() => loadEvent(event))
+                const group = path.split('/').pop().replace(/\.js$/, '')
+                const result = tryIt(() => loadEvent(upgradeEvent(event, group)))
 
                 if (isError(result)) {
                     logError([
