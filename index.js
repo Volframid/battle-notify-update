@@ -397,10 +397,10 @@ function BattleNotify(mod) {
         delete require.cache[file]
         const data = require(file)
 
-        toArray(data)
+        const group = path.split('/').pop().replace(/\.js$/, '')
+        upgradeEvent.rules(toArray(data), group)
             .forEach(event => {
-                const group = path.split('/').pop().replace(/\.js$/, '')
-                const result = tryIt(() => loadEvent(upgradeEvent(event, group)))
+                const result = tryIt(() => loadEvent(event))
 
                 if (isError(result)) {
                     logError([

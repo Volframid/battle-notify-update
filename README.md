@@ -28,6 +28,7 @@ For maintainers: every push to `main` runs the GitHub workflow to regenerate and
 - **Brooch:** one live 5-to-1 countdown for the equipped brooch's recharge, including Shadow Rest, ending with Ready.
 - **Lotus:** independent Moon/Star blessing countdowns from 5 to 1, ending with Ended in the same notification, with protection against false expiry alerts during map changes.
 - **Lancer:** Debilitate and Line Held count down from 10 seconds. Refreshing above 10 seconds removes the countdown immediately; it returns on entering the final 10 seconds again. Legacy endurance debuffs (200300, 200301, 3012020) prevent false missing-Debilitate warnings.
+- **Ninja:** Double Cut Power EP (89314220), Glyph of Blaze (32058) and Cyclic Chi (10154483) each count down in one row from 3 to 1 seconds. Refreshing above 3 seconds or removing the buff cancels its counter. Existing personal Ninja configs receive these three counters at load time without rewriting their other rules.
 - **Named shared buffs:** Infection, Adrenaline Rush, Edict of Judgment and Elemental: Thrall of Wrath display icon, name and remaining duration. Kaia's Shield and Elemental: Thrall of Protection display icon and name. Glyph of the Pump includes its name and duration; the final Antaroth message is `4! Dodge`.
 - **One diagnostic log:** all notification components record through `battle log`.
 
@@ -42,6 +43,14 @@ These are captures of the actual notification renderer with controlled sample ev
 ![Named buffs and brooch countdown](docs/screenshots/buff-brooch-notifications.png)
 
 ![Lotus Ended and brooch Ready](docs/screenshots/countdown-completion.png)
+
+The boxed **Drag to position** handle and **Lock position** control are aligned. Drag the left handle to move the preview; use the right button to lock it.
+
+![Aligned position controls](docs/screenshots/position-controls.png)
+
+![Ninja final-three-second counters](docs/screenshots/ninja-countdowns.png)
+
+Version 1.2.2 also repairs the compressed icon packs shipped in 1.2.1. The packaging checks now open every compressed pack and verify its image contents; download checks validate the installed archive as well as its file hashes.
 
 ## Commands
 

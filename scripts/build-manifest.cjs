@@ -42,8 +42,25 @@ for (const arch of ['x64', 'ia32']) {
 }
 add('native/renderer.json');
 add('native/README.md');
-for (const prefix of '0123456789abcdef') add('ui/icon-packs/' + prefix + '.json.gz');
-for (const name of ['live-countdowns.png', 'buff-brooch-notifications.png', 'countdown-completion.png', 'ninja-icon-coverage.png']) add('docs/screenshots/' + name);
+// Validate the actual published bytes, not only the source PNGs. Binary packs
+// must survive staging/line-ending conversion intact before a manifest is made.
+const iconCatalog = JSON.parse(fs.readFileSync(path.join(root, 'ui/icons.json'), 'utf8'));
+const iconKeys = new Set(Object.keys(iconCatalog.images));
+for (const prefix of '0123456789abcdef') {
+  const relative = 'ui/icon-packs/' + prefix + '.json.gz';
+  const pack = JSON.parse(require('node:zlib').gunzipSync(fs.readFileSync(path.join(root, relative))));
+  for (const [key, url] of Object.entries(pack)) {
+    if (!url.startsWith('data:image/png;base64,')) throw Error('Invalid icon data: ' + key);
+    const data = Buffer.from(url.slice('data:image/png;base64,'.length), 'base64');
+    if (crypto.createHash('sha256').update(data).digest('hex').slice(0, 20) !== key)
+      throw Error('Icon content checksum mismatch: ' + key);
+    iconKeys.add(key);
+  }
+  add(relative);
+}
+for (const [key, image] of Object.entries(iconCatalog.map))
+  if (!iconKeys.has(image)) throw Error('Icon mapping has no image: ' + key);
+for (const name of ['live-countdowns.png', 'buff-brooch-notifications.png', 'countdown-completion.png', 'ninja-icon-coverage.png', 'position-controls.png', 'ninja-countdowns.png']) add('docs/screenshots/' + name);
 for (const name of ['MinHook.txt', 'LLVM.txt', 'MinGW-runtime.txt', 'MinGW.txt', 'Winpthreads.txt']) add('native/licenses/' + name);
 fs.writeFileSync(path.join(root, 'manifest.json'), JSON.stringify({ files }, null, 2) + '\n');
 console.log('Update manifest generated for ' + Object.keys(files).length + ' files.');
