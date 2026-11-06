@@ -3,7 +3,7 @@
   "name": "battle-notify",
   "author": "Caali / wuaw / CEM",
   "description": "Movable icon notifications, card cooldowns, brooch and Lotus monitoring with unified battle logging",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "options": {
     "cliName": "BattleNotify",
     "guiName": "BattleNotify"

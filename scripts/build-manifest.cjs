@@ -42,7 +42,8 @@ for (const arch of ['x64', 'ia32']) {
 }
 add('native/renderer.json');
 add('native/README.md');
-for (const name of ['live-countdowns.png', 'buff-brooch-notifications.png', 'countdown-completion.png']) add('docs/screenshots/' + name);
+for (const prefix of '0123456789abcdef') add('ui/icon-packs/' + prefix + '.json.gz');
+for (const name of ['live-countdowns.png', 'buff-brooch-notifications.png', 'countdown-completion.png', 'ninja-icon-coverage.png']) add('docs/screenshots/' + name);
 for (const name of ['MinHook.txt', 'LLVM.txt', 'MinGW-runtime.txt', 'MinGW.txt', 'Winpthreads.txt']) add('native/licenses/' + name);
 fs.writeFileSync(path.join(root, 'manifest.json'), JSON.stringify({ files }, null, 2) + '\n');
 console.log('Update manifest generated for ' + Object.keys(files).length + ' files.');

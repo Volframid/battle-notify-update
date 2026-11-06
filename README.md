@@ -72,7 +72,11 @@ The settings window controls width, text and icon size, background opacity, disp
 
 The overlay is independent of Modern Meter and uses graphical Toolbox. Its in-game renderer supports Direct3D 9/11 in windowed, borderless and exclusive fullscreen modes. The same notification content and position settings are used across modes. Controlled graphics tests cover both client architectures; compatibility with a particular game build and other overlays still needs live verification. In exclusive fullscreen, opening the desktop settings panel can switch away from the game. Set appearance there, return to the game, then use `/8 battle overlay move` to drag the preview inside the game and click its **Lock position** header button. Turning off movable notifications restores the original game alerts. If the overlay is unavailable or still starting, alerts use the native route once, without replaying duplicates when the overlay becomes ready. Ordinary chat and notice channels retain their existing behavior. Notification timers follow observed buff and cooldown deadlines; they do not change gameplay or skill timing.
 
-Game icons are bundled for the notification display, including the current Moon/Star Lotus and brooch variants. Unmapped server-specific icons use a neutral marker; notification text is retained. Native alerts continue to use the game's own icons. See [icon attribution](ui/ICONS.md).
+Game icons are bundled for the notification display: 139,968 buff, item and skill ID mappings with 10,443 distinct PNGs, including the older Ninja rules, Cyclone reset stages and current Moon/Star Lotus and brooch variants. Compressed texture packs load on demand with a bounded cache. The index is based on the Asura metadata extraction dated 2026-10-28; blank source icons, three unavailable source textures and future unknown IDs retain a neutral marker and the notification text. Native alerts continue to use the game's own icons. See [icon coverage and attribution](ui/ICONS.md).
+
+The older Ninja IDs now resolve in the movable display. This capture uses controlled sample notifications in the actual renderer; it is not a live combat capture.
+
+![Older Ninja notification icons](docs/screenshots/ninja-icon-coverage.png)
 
 ## Settings
 
