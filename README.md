@@ -14,7 +14,7 @@ The update includes the settings UI, icons, and both precompiled 32-bit/64-bit i
 
 Existing user configuration is kept: `config/`, `card-effects.json` and `lotus.json`. Missing default files are installed. Logs, character state and Toolbox's local settings are never downloaded or overwritten. New configuration defaults are available in the repository; existing settings are not reset.
 
-Version 1.2 upgrades the recognized older notification rules in memory: named shared buffs, legacy Debilitate IDs and the Lancer countdown rules work without replacing personal configuration files. Custom labels and unrelated rules are preserved. The old offensive Debilitate reminder is replaced with `DEBILITATE missing`.
+Recognized older notification rules are upgraded in memory so new defaults and corrections also work with preserved configuration files. Custom labels and unrelated rules are retained.
 
 If upgrading from an older ZIP without an update address, install the current package once, or replace `module.json` and restart Toolbox. Also enable this mod's updates in Toolbox if a local `module.config.json` previously disabled them. Toolbox's global mod updates must be enabled.
 
@@ -27,9 +27,8 @@ For maintainers: every push to `main` runs the GitHub workflow to regenerate and
 - **Cards:** proc alerts, one cooldown warning at each 30-second milestone, then one live countdown throughout the final 30 seconds. Outside-combat summaries and configured Ready notifications are retained.
 - **Brooch:** one live 5-to-1 countdown for the equipped brooch's recharge, including Shadow Rest, ending with Ready.
 - **Lotus:** independent Moon/Star blessing countdowns from 5 to 1, ending with Ended in the same notification, with protection against false expiry alerts during map changes.
-- **Lancer:** Debilitate and Line Held count down from 10 seconds. Refreshing above 10 seconds removes the countdown immediately; it returns on entering the final 10 seconds again. Legacy endurance debuffs (200300, 200301, 3012020) prevent false missing-Debilitate warnings.
-- **Ninja:** Double Cut Power EP (89314220), Glyph of Blaze (32058) and Cyclic Chi (10154483) each count down in one row from 3 to 1 seconds. Refreshing above 3 seconds or removing the buff cancels its counter. Existing personal Ninja configs receive these three counters at load time without rewriting their other rules.
-- **Named shared buffs:** Infection, Adrenaline Rush, Edict of Judgment and Elemental: Thrall of Wrath display icon, name and remaining duration. Kaia's Shield and Elemental: Thrall of Protection display icon and name. Glyph of the Pump includes its name and duration; the final Antaroth message is `4! Dodge`.
+- **Buff expiry counters:** supported rules update one notification as the effect expires. Refreshing the buff above the countdown threshold or removing it clears the counter.
+- **Named alerts:** icons, labels and remaining duration follow the configured notification rule.
 - **One diagnostic log:** all notification components record through `battle log`.
 
 The module displays notifications; it does not cast skills or use items.
@@ -47,10 +46,6 @@ These are captures of the actual notification renderer with controlled sample ev
 The boxed **Drag to position** handle and **Lock position** control are aligned. Drag the left handle to move the preview; use the right button to lock it.
 
 ![Aligned position controls](docs/screenshots/position-controls.png)
-
-![Ninja final-three-second counters](docs/screenshots/ninja-countdowns.png)
-
-Version 1.2.2 also repairs the compressed icon packs shipped in 1.2.1. The packaging checks now open every compressed pack and verify its image contents; download checks validate the installed archive as well as its file hashes.
 
 ## Commands
 
@@ -81,11 +76,7 @@ The settings window controls width, text and icon size, background opacity, disp
 
 The overlay is independent of Modern Meter and uses graphical Toolbox. Its in-game renderer supports Direct3D 9/11 in windowed, borderless and exclusive fullscreen modes. The same notification content and position settings are used across modes. Controlled graphics tests cover both client architectures; compatibility with a particular game build and other overlays still needs live verification. In exclusive fullscreen, opening the desktop settings panel can switch away from the game. Set appearance there, return to the game, then use `/8 battle overlay move` to drag the preview inside the game and click its **Lock position** header button. Turning off movable notifications restores the original game alerts. If the overlay is unavailable or still starting, alerts use the native route once, without replaying duplicates when the overlay becomes ready. Ordinary chat and notice channels retain their existing behavior. Notification timers follow observed buff and cooldown deadlines; they do not change gameplay or skill timing.
 
-Game icons are bundled for the notification display: 139,968 buff, item and skill ID mappings with 10,443 distinct PNGs, including the older Ninja rules, Cyclone reset stages and current Moon/Star Lotus and brooch variants. Compressed texture packs load on demand with a bounded cache. The index is based on the Asura metadata extraction dated 2026-10-28; blank source icons, three unavailable source textures and future unknown IDs retain a neutral marker and the notification text. Native alerts continue to use the game's own icons. See [icon coverage and attribution](ui/ICONS.md).
-
-The older Ninja IDs now resolve in the movable display. This capture uses controlled sample notifications in the actual renderer; it is not a live combat capture.
-
-![Older Ninja notification icons](docs/screenshots/ninja-icon-coverage.png)
+Game icons are bundled for the notification display: 139,968 buff, item and skill ID mappings with 10,443 distinct PNGs. Compressed texture packs load on demand with a bounded cache. The index is based on the Asura metadata extraction dated 2026-10-28; blank source icons, three unavailable source textures and future unknown IDs retain a neutral marker and the notification text. Native alerts continue to use the game's own icons. See [icon coverage and attribution](ui/ICONS.md).
 
 ## Settings
 
