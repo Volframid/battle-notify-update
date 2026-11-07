@@ -42,7 +42,7 @@ module.exports = [
             200301,
             3012020
         ],
-        "message": "DEBILITATE missing",
+        "message": "Debilitate Missing",
         "rewarn_timeout": 4
     },
     {

@@ -56,7 +56,7 @@ module.exports = [
         "abnormalities": [
             702004
         ],
-        "message": "{icon} Elemental: Thrall of Wrath {duration}"
+        "message": "{icon} Thrall of Wrath {duration}"
     },
     {
         "type": "added",
@@ -75,7 +75,7 @@ module.exports = [
         "abnormalities": [
             702001
         ],
-        "message": "{icon} Elemental: Thrall of Protection"
+        "message": "{icon} Thrall of Protection"
     },
     {
         "type": "Added",

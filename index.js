@@ -56,6 +56,7 @@ function BattleNotify(mod) {
     const conditions = new Conditions()
     const targets = new Targets()
     const events = new Set()
+    const liveEvents = new Set()
 
     const combat = () => entities.myEntity()?.combat
     const enrage = () => entities.myBoss()?.enraged
@@ -232,31 +233,55 @@ function BattleNotify(mod) {
     function BuffCountdown(data) {
         const getTargets = targets.abnormal[data.target.toLowerCase()]
         const ids = toArray(data.abnormalities), active = new Map()
+        const idSet = new Set(ids), bossTarget = data.target.toLowerCase() === 'myboss'
+        let invalidBefore = -1
         const threshold = data.countdownStart || 10
         const prefix = 'buff:' + data.target + ':' + ids.join(',') + ':'
         this.live = true
+        this.accepts = (target, id) => idSet.has(id) && getTargets().includes(String(target))
+        this.endFight = () => {
+            if (!bossTarget) return
+            invalidBefore = abMan.revision()
+            for (const key of active.keys()) notify.cancelLive(key)
+            active.clear()
+        }
         this.check = function () {
             const seen = new Set(), now = Date.now()
-            if (mod.game.isIngame && interval !== null && !mod.game.isInLoadingScreen) for (const id of getTargets()) {
+            const inFight = !bossTarget || (combat() && !entities.myEntity()?.dead)
+            if (mod.game.isIngame && interval !== null && !mod.game.isInLoadingScreen && inFight) for (const id of getTargets()) {
                 if (!id || entities.get(id).dead) continue
                 const key = prefix + id.toString(); seen.add(key)
                 // Alternatives represent the same useful debuff. A longer active
                 // variant must suppress an expiring shorter one (e.g. training boss).
-                const info = ids.map(buff => abMan.get(id, buff))
-                    .filter(x => (x.added || x.refreshed) && Number(x.expires) > now)
-                    .sort((a, b) => Number(b.expires) - Number(a.expires))[0]
+                let info
+                for (const buff of ids) {
+                    const current = abMan.get(id, buff)
+                    if ((current.added || current.refreshed) && current.revision > invalidBefore &&
+                        Number(current.expires) > now && (!info || current.expires > info.expires)) info = current
+                }
                 const seconds = info ? Math.ceil((Number(info.expires) - now) / 1000) : 0
                 if (seconds > 0 && seconds <= threshold) {
                     const text = data.message.replace('{icon}', info.icon).replace('{duration}', seconds + 's')
                     if (active.get(key) !== text) notify.live(key, text, Number(info.expires))
                     active.set(key, text)
-                } else { notify.cancelLive(key); active.delete(key) }
+                } else if (active.has(key)) { notify.cancelLive(key); active.delete(key) }
             }
             for (const key of active.keys()) if (!seen.has(key)) { notify.cancelLive(key); active.delete(key) }
         }
     }
     // Refresh/end packets cancel or revise a visible buff timer immediately.
-    abMan.onChange = () => { for (const e of events) if (e.live) e.check() }
+    abMan.onChange = (target, id) => {
+        for (const e of liveEvents) if (id === undefined || e.accepts(target, id)) e.check()
+    }
+    const endBossCounters = () => { for (const e of liveEvents) e.endFight() }
+    mod.game.me.on('leave_combat', endBossCounters)
+    entities.onChange = (kind, id) => {
+        const self = id === entities.myCid(), boss = id === entities.myBossId()
+        if ((self && kind === 'combat' && !combat()) ||
+            (self && kind === 'life' && entities.myEntity()?.dead) ||
+            (boss && (kind === 'boss-reset' || kind === 'despawn' || kind === 'life' && entities.get(id).dead))) endBossCounters()
+        else if (self || boss) for (const e of liveEvents) e.check()
+    }
 
     function AbnormalEvent(data) {
         const type = data.type.toLowerCase()
@@ -363,6 +388,7 @@ function BattleNotify(mod) {
 
     function refreshConfig() {
         events.clear()
+        liveEvents.clear()
         cooldown.clearResetHooks()
 
         const job = entities.self().class
@@ -411,6 +437,7 @@ function BattleNotify(mod) {
                     return
                 }
                 events.add(result)
+                if (result.live) liveEvents.add(result)
             })
     }
     function checkEvents() {
@@ -462,6 +489,7 @@ function BattleNotify(mod) {
         abMan.destructor()
         cooldown.destructor()
         mod.game.removeListener('leave_game', stopInterval)
+        mod.game.me.removeListener('leave_combat', endBossCounters)
         mod.command.remove('battle')
         logger.destructor()
     }
