@@ -2,6 +2,10 @@
 
 Buff, cooldown and combat notifications for TERA Toolbox. Based on Battle Notify by Caali / wuaw; extended by CEM.
 
+## Runtime efficiency
+
+Departed NPCs and non-party players release their entity, abnormality and notification history records. Out-of-range party members retain their buff state until leaving the party, and map changes clear tracking histories. Missing-buff checks do not populate world caches. Boss despawn still cancels its active countdown before releasing its target.
+
 ## Installation
 
 Download the installation ZIP from [Releases](https://github.com/Volframid/battle-notify-update/releases/latest) and extract the `battle-notify-update` folder. If using GitHub's source ZIP, rename the extracted folder to `battle-notify-update`. Place that folder in Toolbox's `mods` directory and restart Toolbox. Install only one copy. No additional mod or external skill data is required. Use graphical Toolbox on Windows 10/11.

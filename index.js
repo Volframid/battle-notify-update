@@ -249,7 +249,7 @@ function BattleNotify(mod) {
             const seen = new Set(), now = Date.now()
             const inFight = !bossTarget || (combat() && !entities.myEntity()?.dead)
             if (mod.game.isIngame && interval !== null && !mod.game.isInLoadingScreen && inFight) for (const id of getTargets()) {
-                if (!id || entities.get(id).dead) continue
+                if (!id || id === '0' || entities.get(id).dead) continue
                 const key = prefix + id.toString(); seen.add(key)
                 // Alternatives represent the same useful debuff. A longer active
                 // variant must suppress an expiring shorter one (e.g. training boss).
@@ -282,6 +282,13 @@ function BattleNotify(mod) {
             (boss && (kind === 'boss-reset' || kind === 'despawn' || kind === 'life' && entities.get(id).dead))) endBossCounters()
         else if (self || boss) for (const e of liveEvents) e.check()
     }
+    entities.onForget = id => {
+        abMan.forget(id)
+        for (const e of events) if (e.forget) e.forget(id)
+    }
+    mod.hook('S_LOAD_TOPO', 'event', () => {
+        for (const e of events) if (e.resetTracking) e.resetTracking()
+    })
 
     function AbnormalEvent(data) {
         const type = data.type.toLowerCase()
@@ -298,6 +305,8 @@ function BattleNotify(mod) {
         event.message = data.message
         event.lastMatches = new Map()
         event.matchAll = type.includes('missing')
+        this.forget = id => event.lastMatches.delete(id)
+        this.resetTracking = () => event.lastMatches.clear()
 
         this.check = function () {
             getTargets()
@@ -311,7 +320,7 @@ function BattleNotify(mod) {
         }
     }
     function checkAbnormalEvent(entityId, event) {
-        if (!entityId) return
+        if (!entityId || entityId === '0') return
         const entity = entities.get(entityId)
         if (entity.dead) return
 
